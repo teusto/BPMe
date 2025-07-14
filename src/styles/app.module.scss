@@ -1,0 +1,58 @@
+.App {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    border: 1px solid red;
+    width: 100vw;
+    .App__card {
+        flex: 1;
+        border: 1px solid green;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 1.2rem;
+        .bpm {
+            border: 1px solid blue;
+            display: flex;
+            flex-direction: column;
+            .bpm_display {
+                border: 1px solid green;
+                font-size: 2.5rem;
+                font-weight: bold;
+                text-align: center;
+            }
+            .bpm_slider {
+                border: 1px solid red;
+            }
+        }
+        .activity {
+            border: 1px solid red;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+            .activity_options {
+                display: flex;
+                flex-direction: row;
+                gap: 1.2rem;
+                justify-content: center;
+                flex-wrap: wrap;
+                div {
+                    border: 1px solid green;
+                    padding: 0.5rem;
+                    width: 20%;
+                    border-radius: 6px;
+                    font-weight: bold;
+                    aspect-ratio: 1;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .App__card_sides {
+        flex: 1;
+        text-align: center;
+        border: 1px solid blue;
+    }
+}
