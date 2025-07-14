@@ -1,0 +1,27 @@
+.activity {
+    border: 1px solid #1ec14f1d;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: #2a4332c1;
+    cursor: pointer;
+    padding: 0.5rem;
+    width: 20%;
+    border-radius: 6px;
+    font-weight: bold;
+    aspect-ratio: 1;
+    color: #FFF;
+    &:hover {
+        background-color: #f0ffae;
+        color: #212121;
+    }
+}
+
+.active {
+    border: 1px solid #f0ffae;
+    background-color: #f0ffae;
+    color: #212121;
+    font-weight: bold;
+    width: 20%;
+    border-radius: 6px;
+    aspect-ratio: 1;
+    padding: 0.5rem;
+}

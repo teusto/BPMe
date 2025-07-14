@@ -1,0 +1,23 @@
+.BPMSlider {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    .slider_container {
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        gap: 0.5rem;
+        .BPMSlider__input {
+            width: 100%;
+            color: #F8F8F8;
+        }
+        .slider_container__values {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            color: #F8F8F8;
+            font-weight: bold;
+        }
+    }
+}

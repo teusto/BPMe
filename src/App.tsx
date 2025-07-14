@@ -1,19 +1,33 @@
 import styles from "./styles/app.module.scss";
 import React, { useState, useCallback, useMemo } from "react";
+import Activity from "./components/Activity";
+import BPMSlider from "./components/BPMSlider";
+import usePlaylistGenerator from "./hooks/usePlaylistGenerator";
 
-interface Activity {
+export interface IActivity {
   id: string;
   name: string;
   bpmRange: [number, number];
   icon: string;
 }
 
-interface BPMRange {
+export interface BPMRange {
   min: number;
   max: number;
   label: string;
   description: string;
 }
+
+const ACTIVITIES: IActivity[] = [
+  { id: 'walking', name: 'Walking', icon: '🚶', bpmRange: [60, 80] },
+  { id: 'running', name: 'Running', icon: '🏃‍♂️', bpmRange: [140, 180] },
+  { id: 'cycling', name: 'Cycling', icon: '🚴', bpmRange: [120, 150] },
+  { id: 'boxing', name: 'Boxing', icon: '🥊', bpmRange: [120, 140] },
+  { id: 'yoga', name: 'Yoga', icon: '🧘', bpmRange: [80, 120] },
+  { id: 'gym', name: 'Gym', icon: '💪', bpmRange: [120, 160] },
+  { id: 'dance', name: 'Dance', icon: '💃', bpmRange: [128, 138] },
+  { id: 'working', name: 'Working', icon: '💼', bpmRange: [60, 120] },
+];
 
 const BPM_RANGES: BPMRange[] = [
   { min: 60, max: 80, label: 'Warm-up', description: 'Gentle start' },
@@ -25,14 +39,21 @@ const BPM_RANGES: BPMRange[] = [
 ];
 
 const App = () => {
-  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [selectedActivity, setSelectedActivity] = useState<IActivity | null>(null);
   const [targetBPM, setTargetBPM] = useState<number>(120);
 
-  const handleActivitySelect = useCallback((activity: Activity) => {
+  const { isGenerating, generatePlaylist } = usePlaylistGenerator();
+
+  const handleActivitySelect = useCallback((activity: IActivity) => {
     setSelectedActivity(activity);
     const avgBPM = Math.round((activity.bpmRange[0] + activity.bpmRange[1]) / 2);
     setTargetBPM(avgBPM);
   }, []);
+
+  const handleGeneratePlaylist = useCallback(async () => {
+    const songs = await generatePlaylist(targetBPM);
+    console.log(songs);
+  }, [targetBPM, generatePlaylist])
 
   const currentBPMRange = useMemo(() => {
     return BPM_RANGES.find(range => targetBPM >= range.min && targetBPM <= range.max);
@@ -42,26 +63,35 @@ const App = () => {
     <section className={styles.App}>
       <div className={styles.App__card_sides}>left</div>
       <div className={styles.App__card}>
-        <div>
+        <div className={styles.App__card__header}>
           <h1>BPMe a playlist</h1>
           <p>Create the perfect playlist based on your activity and desired tempo</p>
         </div>
         <div className={styles.bpm}>
-          <div className={styles.bpm_display}>120 BPM</div>
-          <input type="range" id="bpm-slider" className={styles.bpm_slider} min="60" max="200" value="120" />
+          <div className={styles.bpm_display}>{targetBPM} BPM</div>
+          <BPMSlider value={targetBPM} onchange={setTargetBPM} />
         </div>
         <div className={styles.activity}>
           <div>Activity</div>
           <div className={styles.activity_options}>
-            <div>Workout</div>
-            <div>Running</div>
-            <div>Cycling</div>
-            <div>Walking</div>
-            <div>Yoga</div>
-            <div>Meditation</div>
-            <div>Swimming</div>
-            <div>Working</div>
+            {ACTIVITIES.map(activity => (
+              <Activity 
+              key={activity.id} 
+              onClick={handleActivitySelect} 
+              activity={activity} 
+              isActive={selectedActivity?.id === activity.id} />
+            ))}
           </div>
+        </div>
+
+        <div className={styles.generate_playlist}>
+          <button
+            onClick={handleGeneratePlaylist}
+            disabled={isGenerating}
+            className={styles.generate_playlist__button}
+          >
+            {isGenerating ? 'Generating...' : 'Generate Playlist'}
+          </button>
         </div>
       </div>
       <div className={styles.App__card_sides}>right</div>
